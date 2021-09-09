@@ -20,3 +20,10 @@ export interface IBank {
     type: string;
     updatedAt: string;
 }
+
+export interface IInitiateTransfer {
+    source: string;
+    amount: string;
+    recipient: string;
+    reason: string;
+}

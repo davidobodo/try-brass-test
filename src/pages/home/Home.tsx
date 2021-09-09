@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-import { IUserAccountDetails, IBank } from "../../interfaces";
+import { IUserAccountDetails, IBank, IInitiateTransfer } from "../../interfaces";
 
 const Home = (): JSX.Element => {
     //-----------------------------------------------
@@ -127,6 +127,20 @@ const Home = (): JSX.Element => {
         }
     };
 
+    const initiateTrasfer = async (body: IInitiateTransfer) => {
+        try {
+            const res = await axios.post("https://api.paystack.co/transfer", body, {
+                headers: {
+                    Authorization: `Bearer ${process.env.REACT_APP_PAYSTACK_TEST_SECRET_KEY}`
+                }
+            });
+
+            return res.data.data;
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -137,11 +151,18 @@ const Home = (): JSX.Element => {
             return;
         }
 
-        try {
-            const res = await createTransferRecipient();
-        } catch (error) {
-            console.log(error);
-        }
+        const transferReceipt = await createTransferRecipient().catch((error) => console.log(error));
+
+        const transferBody = {
+            source: "balance",
+            amount: amountToSend,
+            recipient: transferReceipt.recipient_code,
+            reason: "Try brass Test"
+        };
+
+        const transferResponse = await initiateTrasfer(transferBody).catch((error) => console.log(error));
+
+        console.log(transferResponse, "THE FINAL TRANSFER");
     };
 
     return (
