@@ -27,3 +27,50 @@ export interface IInitiateTransfer {
     recipient: string;
     reason: string;
 }
+
+export interface ITransaction {
+    amount: number;
+    createdAt: string;
+    currency: string;
+    domain: string;
+    failures: never;
+    id: number;
+    integration: number;
+    reason: string;
+    recipient: ITransactionRecipient;
+    reference: string;
+    session: { provider: never; id: never };
+    source: string;
+    source_details: null;
+    status: string;
+    titan_code: null;
+    transfer_code: string;
+    transferred_at: null;
+    updatedAt: string;
+}
+
+export interface ITransactionRecipient {
+    active: boolean;
+    createdAt: string;
+    currency: string;
+    description: any;
+    details: ITransactionRecipientDetails;
+    domain: string;
+    email: null;
+    id: number;
+    integration: number;
+    is_deleted: boolean;
+    metadata: null;
+    name: string;
+    recipient_code: string;
+    type: string;
+    updatedAt: string;
+}
+
+export interface ITransactionRecipientDetails {
+    account_name: string;
+    account_number: string;
+    authorization_code: null;
+    bank_code: string;
+    bank_name: string;
+}
