@@ -11,12 +11,14 @@ import "./App.scss";
 function App() {
     return (
         <BrowserRouter>
-            <div id="app-wrapper">
+            <div className="app-wrapper">
                 <Sidebar />
-                <Switch>
-                    <Route exact path="/" component={Home} />
-                    <Route exact path="/history" component={History} />
-                </Switch>
+                <div className="app-wrapper__content">
+                    <Switch>
+                        <Route exact path="/" component={Home} />
+                        <Route exact path="/history" component={History} />
+                    </Switch>
+                </div>
             </div>
         </BrowserRouter>
     );

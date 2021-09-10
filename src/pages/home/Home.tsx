@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import "./Home.scss";
 
 import { IUserAccountDetails, IBank, IInitiateTransfer } from "../../interfaces";
 
@@ -166,46 +167,55 @@ const Home = (): JSX.Element => {
     };
 
     return (
-        <form noValidate onSubmit={handleSubmitForm}>
-            <div>
-                <label htmlFor="banks">Select bank</label>
-                <select name="banks" id="banks" onChange={handleSelectBankCode}>
-                    <option value="">Choose a bank</option>
-                    {banks.map((bank) => {
-                        const { name, code } = bank;
-                        return (
-                            <option value={code} key={code}>
-                                {name}
-                            </option>
-                        );
-                    })}
-                </select>
-            </div>
+        <div className="home-page">
+            <form noValidate onSubmit={handleSubmitForm} className="home-page__form">
+                <h3 className="home-page__form__title">Transfer</h3>
+                <div className="form-field">
+                    <label htmlFor="banks">Select bank</label>
+                    <select name="banks" id="banks" onChange={handleSelectBankCode}>
+                        <option value="">Choose a bank</option>
+                        {banks.map((bank) => {
+                            const { name, code } = bank;
+                            return (
+                                <option value={code} key={code}>
+                                    {name}
+                                </option>
+                            );
+                        })}
+                    </select>
+                </div>
 
-            <div>
-                <label htmlFor="acc_number">Enter your account number</label>
-                <input
-                    type="text"
-                    name="acc_number"
-                    id="acc_number"
-                    value={accountNumber}
-                    onChange={handleSetAccountNumber}
-                    placeholder="**********"
-                />
-            </div>
+                <div className="form-field">
+                    <label htmlFor="acc_number">Enter your account number</label>
+                    <input
+                        type="text"
+                        name="acc_number"
+                        id="acc_number"
+                        value={accountNumber}
+                        onChange={handleSetAccountNumber}
+                        placeholder="**********"
+                    />
+                </div>
 
-            <div>
-                <label htmlFor="acc_name">Account Name</label>
-                <input type="text" name="acc_name" id="acc_name" value={validatedAccDetails?.account_name} />
-            </div>
+                <div className="form-field">
+                    <label htmlFor="acc_name">Account Name</label>
+                    <input type="text" name="acc_name" id="acc_name" value={validatedAccDetails?.account_name} />
+                </div>
 
-            <div>
-                <label htmlFor="amount">Enter amount</label>
-                <input type="text" name="amount" id="amount" value={amountToSend} onChange={handleSetAmountToSend} />
-            </div>
+                <div className="form-field">
+                    <label htmlFor="amount">Enter amount</label>
+                    <input
+                        type="text"
+                        name="amount"
+                        id="amount"
+                        value={amountToSend}
+                        onChange={handleSetAmountToSend}
+                    />
+                </div>
 
-            <button type="submit">Send</button>
-        </form>
+                <button type="submit">Send</button>
+            </form>
+        </div>
     );
 };
 

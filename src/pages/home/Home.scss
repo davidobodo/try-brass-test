@@ -1,0 +1,52 @@
+@import "../../index.scss";
+
+.home-page {
+    &__form {
+        max-width: 40rem;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 0.5rem;
+        padding: 3rem 2rem;
+        margin: auto;
+        margin-top: 10rem;
+
+        &__title {
+            margin-bottom: 2.4rem;
+            text-align: center;
+        }
+
+        .form-field {
+            margin-bottom: 3rem;
+        }
+
+        select {
+            height: 4rem;
+            width: 100%;
+            border-radius: 0.5rem;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 0px 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        input {
+            height: 4rem;
+            width: 100%;
+            border-radius: 0.5rem;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 0px 1.5rem;
+        }
+
+        button {
+            height: 4rem;
+            background-color: $trybrass-blue;
+            color: #fff;
+            border: 0px;
+            border-radius: 0.5rem;
+            width: 100%;
+            cursor: pointer;
+        }
+    }
+}
