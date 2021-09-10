@@ -1,0 +1,50 @@
+@import "../../index.scss";
+
+.sidebar-component {
+    width: 22rem;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    background-color: $trybrass-blue;
+    color: #fff;
+    padding-top: 5rem;
+
+    &__user {
+        margin-bottom: 5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        &__pp {
+            width: 15rem;
+            height: 15rem;
+            border-radius: 50%;
+            margin-bottom: 2rem;
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        h4 {
+            font-weight: 400;
+        }
+    }
+
+    a {
+        color: #fff;
+        text-decoration: none;
+        display: flex;
+        height: 5rem;
+        align-items: center;
+        padding-left: 2rem;
+
+        &:hover {
+            background-color: #fff;
+            color: $trybrass-blue;
+        }
+
+        &.active {
+            background-color: #fff;
+            color: $trybrass-blue;
+        }
+    }
+}
