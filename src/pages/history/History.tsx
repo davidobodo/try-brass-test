@@ -13,7 +13,6 @@ const History = () => {
                     }
                 });
 
-                console.log(res.data.data, "THE DATA");
                 setTransferHistory(res.data.data);
             } catch (error) {
                 console.log(error);
