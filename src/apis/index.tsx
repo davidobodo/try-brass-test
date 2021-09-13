@@ -8,7 +8,7 @@ export const validateAccNumber = async (accNum: string, bankCode: string) => {
             `https://api.paystack.co/bank/resolve?account_number=${accNum}&bank_code=${bankCode}`,
             {
                 headers: {
-                    Authorization: `Bearer ${process.env.REACT_APP_PAYSTACK_TEST_SECRET_KEY}`
+                    Authorization: `Bearer ${process.env.REACT_APP_PAYSTACK_TEST_PUBLIC_KEY}`
                 }
             }
         );
@@ -23,7 +23,7 @@ export const createTransferRecipient = async (body: ITransferRecipient) => {
     try {
         const res = await axios.post("https://api.paystack.co/transferrecipient", body, {
             headers: {
-                Authorization: `Bearer ${process.env.REACT_APP_PAYSTACK_TEST_SECRET_KEY}`
+                Authorization: `Bearer ${process.env.REACT_APP_PAYSTACK_TEST_PUBLIC_KEY}`
             }
         });
 
@@ -37,7 +37,7 @@ export const initiateTrasfer = async (body: IInitiateTransfer) => {
     try {
         const res = await axios.post("https://api.paystack.co/transfer", body, {
             headers: {
-                Authorization: `Bearer ${process.env.REACT_APP_PAYSTACK_TEST_SECRET_KEY}`
+                Authorization: `Bearer ${process.env.REACT_APP_PAYSTACK_TEST_PUBLIC_KEY}`
             }
         });
 
