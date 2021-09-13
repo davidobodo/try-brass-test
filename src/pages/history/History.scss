@@ -1,0 +1,54 @@
+@import "../../index.scss";
+
+.history-page {
+    padding: 10rem;
+    &__table {
+        border: 1px solid $light-black;
+        border-radius: 5px;
+
+        &__header {
+            height: 6rem;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid $light-black;
+
+            div {
+                font-size: 1.4rem;
+                padding-left: 2rem;
+                width: 24%;
+
+                &:first-child {
+                    width: 5rem;
+                    display: flex;
+                    justify-content: center;
+                }
+            }
+        }
+
+        &__body {
+            &__row {
+                display: flex;
+                align-items: center;
+                height: 6rem;
+                border-bottom: 1px solid $light-black;
+                cursor: pointer;
+
+                div {
+                    font-size: 1.4rem;
+                    padding-left: 2rem;
+                    width: 24%;
+
+                    &:first-child {
+                        width: 5rem;
+                        display: flex;
+                        justify-content: center;
+                    }
+                }
+
+                &:last-child {
+                    border-bottom: 0px;
+                }
+            }
+        }
+    }
+}
