@@ -4,16 +4,20 @@
     padding: 10rem;
     &__table {
         border: 1px solid $light-black;
-        border-radius: 5px;
+        border-radius: 10px;
 
         &__header {
             height: 6rem;
             display: flex;
             align-items: center;
             border-bottom: 1px solid $light-black;
+            background-color: $trybrass-blue;
+            border-radius: 10px 10px 0px 0px;
 
             div {
                 font-size: 1.4rem;
+                font-weight: 500;
+                color: #fff;
                 padding-left: 2rem;
                 width: 24%;
 
@@ -32,6 +36,11 @@
                 height: 6rem;
                 border-bottom: 1px solid $light-black;
                 cursor: pointer;
+
+                &:hover {
+                    background-color: $light-black;
+                    cursor: pointer;
+                }
 
                 div {
                     font-size: 1.4rem;

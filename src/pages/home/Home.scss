@@ -19,6 +19,10 @@
         margin: auto;
         margin-top: 10rem;
 
+        @media (max-width: 768px) {
+            border: 0px;
+        }
+
         &__title {
             margin-bottom: 2.4rem;
             text-align: center;

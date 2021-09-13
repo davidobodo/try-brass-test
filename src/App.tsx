@@ -5,6 +5,7 @@ import Home from "./pages/home/Home";
 import History from "./pages/history/History";
 
 import Sidebar from "./components/sidebar/Sidebar";
+import MobileNav from "./components/mobileNav/MobileNav";
 
 import "./App.scss";
 
@@ -13,6 +14,7 @@ function App() {
         <BrowserRouter>
             <div className="app-wrapper">
                 <Sidebar />
+                <MobileNav />
                 <div className="app-wrapper__content">
                     <Switch>
                         <Route exact path="/" component={Home} />

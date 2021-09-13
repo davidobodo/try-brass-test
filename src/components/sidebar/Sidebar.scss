@@ -9,6 +9,10 @@
     color: #fff;
     padding-top: 5rem;
 
+    @media (max-width: 768px) {
+        display: none;
+    }
+
     &__user {
         margin-bottom: 5rem;
         display: flex;
