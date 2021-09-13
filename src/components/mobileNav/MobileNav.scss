@@ -5,6 +5,7 @@
     position: fixed;
     width: 100%;
     border-bottom: 2px solid $light-black;
+    z-index: 10;
 
     @media (min-width: 768px) {
         display: none;
@@ -19,6 +20,7 @@
         justify-content: center;
         text-decoration: none;
         border-right: 2px solid $light-black;
+        background-color: #fff;
 
         &:last-child {
             border-right: 0px;

@@ -1,10 +1,23 @@
 @import "../../index.scss";
 
 .history-page {
-    padding: 10rem;
+    padding: 2rem;
+    padding-top: 10rem;
+    width: 100vw;
+
+    @media (min-width: 768px) {
+        padding: 10rem;
+    }
+
+    .table-wrapper {
+        weight: 100%;
+        overflow: auto;
+    }
+
     &__table {
         border: 1px solid $light-black;
         border-radius: 10px;
+        min-width: 65rem;
 
         &__header {
             height: 6rem;
@@ -87,10 +100,16 @@
 
         .row {
             display: flex;
-            justify-content: space-between;
             align-items: center;
             height: 6rem;
             border-bottom: 1px solid $light-black;
+            flex-direction: column;
+            justify-content: center;
+
+            @media (min-width: 768px) {
+                flex-direction: row;
+                justify-content: space-between;
+            }
 
             &:last-child {
                 border-bottom: 0px;

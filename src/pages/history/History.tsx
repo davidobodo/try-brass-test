@@ -45,31 +45,33 @@ const History = () => {
     return (
         <>
             <div className="history-page">
-                <div className="history-page__table">
-                    <div className="history-page__table__header">
-                        <div>S/N</div>
-                        <div>Amount</div>
-                        <div>Bank</div>
-                        <div>Recipient</div>
-                        <div>Date</div>
-                    </div>
-                    <div className="history-page__table__body">
-                        {transferHistory.map((item: ITransaction, index) => {
-                            const { amount, id, recipient, createdAt } = item;
-                            return (
-                                <div
-                                    key={id}
-                                    className="history-page__table__body__row"
-                                    onClick={() => handleSelectTransaction(item)}
-                                >
-                                    <div>{index + 1}</div>
-                                    <div>{toCurrency(removePaystackLaggingZeroes(amount))}</div>
-                                    <div>{recipient.details.bank_name}</div>
-                                    <div>{recipient.name}</div>
-                                    <div>{format(new Date(`${createdAt}`), "dd MMMM yyyy HH:mm:ss")}</div>
-                                </div>
-                            );
-                        })}
+                <div className="table-wrapper">
+                    <div className="history-page__table">
+                        <div className="history-page__table__header">
+                            <div>S/N</div>
+                            <div>Amount</div>
+                            <div>Bank</div>
+                            <div>Recipient</div>
+                            <div>Date</div>
+                        </div>
+                        <div className="history-page__table__body">
+                            {transferHistory.map((item: ITransaction, index) => {
+                                const { amount, id, recipient, createdAt } = item;
+                                return (
+                                    <div
+                                        key={id}
+                                        className="history-page__table__body__row"
+                                        onClick={() => handleSelectTransaction(item)}
+                                    >
+                                        <div>{index + 1}</div>
+                                        <div>{toCurrency(removePaystackLaggingZeroes(amount))}</div>
+                                        <div>{recipient.details.bank_name}</div>
+                                        <div>{recipient.name}</div>
+                                        <div>{format(new Date(`${createdAt}`), "dd MMMM yyyy HH:mm:ss")}</div>
+                                    </div>
+                                );
+                            })}
+                        </div>
                     </div>
                 </div>
             </div>
