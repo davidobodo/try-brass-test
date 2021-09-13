@@ -11,7 +11,9 @@ import { IUserAccountDetails, IBank } from "../../interfaces";
 
 const Home = (): JSX.Element => {
     const [loading, setLoading] = useState(false);
-    const [errors, setErrors] = useState({});
+    const [errors, setErrors] = useState({
+        acc_num: ""
+    });
     //-----------------------------------------------
     //Listing banks
     //-----------------------------------------------
@@ -52,7 +54,6 @@ const Home = (): JSX.Element => {
     //Validate account number
     //-----------------------------------------------
     const [validatedAccDetails, setValidatedAccDetails] = useState<IUserAccountDetails>();
-
     useEffect(() => {
         if (accountNumber.length === 10 && selectedBankCode !== "") {
             const getAccNum = async () => {
@@ -61,9 +62,25 @@ const Home = (): JSX.Element => {
                     const data = await validateAccNumber(accountNumber, selectedBankCode);
                     setValidatedAccDetails(data);
                     setLoading(false);
+                    setErrors((prevState) => {
+                        return {
+                            ...prevState,
+                            acc_num: ""
+                        };
+                    });
                 } catch (error) {
+                    setErrors((prevState) => {
+                        return {
+                            ...prevState,
+                            acc_num: "Please check account number and try again"
+                        };
+                    });
+                    setValidatedAccDetails({
+                        account_name: "",
+                        account_number: "",
+                        bank_id: 0
+                    });
                     setLoading(false);
-                    console.log(error);
                 }
             };
             getAccNum();
@@ -81,33 +98,38 @@ const Home = (): JSX.Element => {
         const _value = value.match(/\d/g) || [];
         const joinedNumbers = _value.join("");
 
-        //Make sure amount doesnt exceed the maximum allowed
         if (+joinedNumbers <= max_amount) {
-            setAmountToSend(joinedNumbers);
+            setAmountToSend(numberWithCommas(joinedNumbers));
         }
     };
 
-    const validateAmountToSend = (amount: string, min: number, max: number): boolean => {
-        if (+amount >= min && +amount <= max) {
-            return true;
+    //-----------------------------------------------
+    //Submit Button
+    //-----------------------------------------------
+    const [buttonIsDisabled, setButtonIsDisabled] = useState(true);
+    useEffect(() => {
+        if (
+            validateAmountToSend(numberWithoutCommas(amountToSend), min_amount, max_amount) &&
+            selectedBankCode !== "" &&
+            validatedAccDetails?.account_name !== ""
+        ) {
+            setButtonIsDisabled(false);
         } else {
-            return false;
+            setButtonIsDisabled(true);
         }
-    };
+    }, [amountToSend, selectedBankCode, validatedAccDetails?.account_name]);
 
     //-----------------------------------------------
     //Submit Form
     //-----------------------------------------------
-
+    const [transferNotification, setTransferNotification] = useState({
+        status: "",
+        message: ""
+    });
     const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        const isAmountWithinRange = validateAmountToSend(amountToSend, min_amount, max_amount);
-
-        if (!isAmountWithinRange) {
-            alert("Amount must be withing 100 to 10000000");
-            return;
-        }
+        setLoading(true);
 
         const getBank: IBank = banks.find((bank) => bank.code === selectedBankCode) as IBank;
         const { type, currency } = getBank;
@@ -123,12 +145,47 @@ const Home = (): JSX.Element => {
 
         const transferBody = {
             source: "balance",
-            amount: amountToSend,
+            amount: `${numberWithoutCommas(amountToSend)}00`,
             recipient: transferReceipt.recipient_code,
             reason: "Try brass Test"
         };
 
-        const transferResponse = await initiateTrasfer(transferBody).catch((error) => console.log(error));
+        const transferResponse = await initiateTrasfer(transferBody).catch((error) => {
+            setLoading(false);
+            setTransferNotification({
+                status: "failed",
+                message: "Funds transfer unsuccessful, please try again 😔"
+            });
+            resetAllFields();
+        });
+
+        if (transferResponse.status === "success") {
+            setLoading(false);
+            setTransferNotification({
+                status: "success",
+                message: "Funds transfer successful 🎉"
+            });
+            resetAllFields();
+        }
+
+        setTimeout(() => {
+            setTransferNotification({
+                status: "",
+                message: ""
+            });
+        }, 5000);
+    };
+
+    const resetAllFields = () => {
+        setSelectedBankCode("");
+        setAccountNumber("");
+        setValidatedAccDetails({
+            account_name: "",
+            account_number: "",
+            bank_id: 0
+        });
+        setAmountToSend("");
+        setButtonIsDisabled(true);
     };
 
     return (
@@ -166,16 +223,26 @@ const Home = (): JSX.Element => {
                             value={accountNumber}
                             onChange={handleSetAccountNumber}
                             placeholder="**********"
+                            className={errors.acc_num !== "" ? "error" : ""}
                         />
+
+                        {errors.acc_num !== "" && <h6 className="error-message">{errors.acc_num}</h6>}
                     </div>
 
                     <div className="form-field">
                         <label htmlFor="acc_name">Account Name</label>
-                        <input type="text" name="acc_name" id="acc_name" value={validatedAccDetails?.account_name} />
+                        <input
+                            type="text"
+                            name="acc_name"
+                            id="acc_name"
+                            value={validatedAccDetails?.account_name}
+                            readOnly
+                        />
                     </div>
 
                     <div className="form-field">
                         <label htmlFor="amount">Enter amount</label>
+                        <h6 className="sub-label">Amount must be within the range of 100 - 10,000,000</h6>
                         <input
                             type="text"
                             name="amount"
@@ -185,7 +252,17 @@ const Home = (): JSX.Element => {
                         />
                     </div>
 
-                    <button type="submit">Send</button>
+                    <button type="submit" disabled={buttonIsDisabled}>
+                        Send
+                    </button>
+
+                    {transferNotification.status !== "" && (
+                        <div className="transfer-notification">
+                            <h4 className={transferNotification.status ? "success" : "error"}>
+                                {transferNotification.message}
+                            </h4>
+                        </div>
+                    )}
                 </form>
             </div>
         </>
@@ -193,3 +270,22 @@ const Home = (): JSX.Element => {
 };
 
 export default Home;
+
+//------------------------------------------------
+//UTILITIES
+//------------------------------------------------
+function numberWithCommas(x: number | string): string {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+function numberWithoutCommas(x: string): string {
+    return x.split(",").join("");
+}
+
+function validateAmountToSend(amount: string, min: number, max: number): boolean {
+    if (+amount >= min && +amount <= max) {
+        return true;
+    } else {
+        return false;
+    }
+}

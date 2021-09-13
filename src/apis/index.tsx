@@ -15,7 +15,7 @@ export const validateAccNumber = async (accNum: string, bankCode: string) => {
 
         return res.data.data;
     } catch (error) {
-        console.log(error);
+        throw error;
     }
 };
 
@@ -29,7 +29,7 @@ export const createTransferRecipient = async (body: ITransferRecipient) => {
 
         return res.data.data;
     } catch (error) {
-        console.log(error);
+        throw error;
     }
 };
 
@@ -43,6 +43,6 @@ export const initiateTrasfer = async (body: IInitiateTransfer) => {
 
         return res.data.data;
     } catch (error) {
-        console.log(error);
+        throw error;
     }
 };
