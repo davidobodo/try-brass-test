@@ -1,5 +1,15 @@
 @import "../../index.scss";
 
+.loading-modal {
+    position: fixed;
+    top: 0px;
+    height: 100vh;
+    width: calc(100% - 22rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .home-page {
     &__form {
         max-width: 40rem;

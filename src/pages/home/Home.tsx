@@ -3,10 +3,15 @@ import axios from "axios";
 import "./Home.scss";
 
 import Backdrop from "../../components/backdrop/Backdrop";
+import Loader from "../../components/loader/Loader";
 
-import { IUserAccountDetails, IBank, IInitiateTransfer } from "../../interfaces";
+import { validateAccNumber, createTransferRecipient, initiateTrasfer } from "../../apis/index";
+
+import { IUserAccountDetails, IBank } from "../../interfaces";
 
 const Home = (): JSX.Element => {
+    const [loading, setLoading] = useState(false);
+    const [errors, setErrors] = useState({});
     //-----------------------------------------------
     //Listing banks
     //-----------------------------------------------
@@ -47,29 +52,17 @@ const Home = (): JSX.Element => {
     //Validate account number
     //-----------------------------------------------
     const [validatedAccDetails, setValidatedAccDetails] = useState<IUserAccountDetails>();
-    const validateAccNumber = async (accNum: string, bankCode: string) => {
-        try {
-            const res = await axios.get(
-                `https://api.paystack.co/bank/resolve?account_number=${accNum}&bank_code=${bankCode}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${process.env.REACT_APP_PAYSTACK_TEST_SECRET_KEY}`
-                    }
-                }
-            );
 
-            return res.data.data;
-        } catch (error) {
-            console.log(error);
-        }
-    };
     useEffect(() => {
         if (accountNumber.length === 10 && selectedBankCode !== "") {
             const getAccNum = async () => {
+                setLoading(true);
                 try {
                     const data = await validateAccNumber(accountNumber, selectedBankCode);
                     setValidatedAccDetails(data);
+                    setLoading(false);
                 } catch (error) {
+                    setLoading(false);
                     console.log(error);
                 }
             };
@@ -106,44 +99,6 @@ const Home = (): JSX.Element => {
     //Submit Form
     //-----------------------------------------------
 
-    const createTransferRecipient = async () => {
-        const getBank: IBank = banks.find((bank) => bank.code === selectedBankCode) as IBank;
-        const { type, currency } = getBank;
-        const body = {
-            type,
-            name: validatedAccDetails?.account_name,
-            account_number: accountNumber,
-            bank_code: selectedBankCode,
-            currency
-        };
-
-        try {
-            const res = await axios.post("https://api.paystack.co/transferrecipient", body, {
-                headers: {
-                    Authorization: `Bearer ${process.env.REACT_APP_PAYSTACK_TEST_SECRET_KEY}`
-                }
-            });
-
-            return res.data.data;
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
-    const initiateTrasfer = async (body: IInitiateTransfer) => {
-        try {
-            const res = await axios.post("https://api.paystack.co/transfer", body, {
-                headers: {
-                    Authorization: `Bearer ${process.env.REACT_APP_PAYSTACK_TEST_SECRET_KEY}`
-                }
-            });
-
-            return res.data.data;
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
     const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -154,7 +109,17 @@ const Home = (): JSX.Element => {
             return;
         }
 
-        const transferReceipt = await createTransferRecipient().catch((error) => console.log(error));
+        const getBank: IBank = banks.find((bank) => bank.code === selectedBankCode) as IBank;
+        const { type, currency } = getBank;
+        const body = {
+            type,
+            name: validatedAccDetails?.account_name,
+            account_number: accountNumber,
+            bank_code: selectedBankCode,
+            currency
+        };
+
+        const transferReceipt = await createTransferRecipient(body).catch((error) => console.log(error));
 
         const transferBody = {
             source: "balance",
@@ -164,13 +129,16 @@ const Home = (): JSX.Element => {
         };
 
         const transferResponse = await initiateTrasfer(transferBody).catch((error) => console.log(error));
-
-        console.log(transferResponse, "THE FINAL TRANSFER");
     };
 
     return (
         <>
-            <Backdrop />
+            {loading && (
+                <div className="loading-modal">
+                    <Loader />
+                    <Backdrop />
+                </div>
+            )}
             <div className="home-page">
                 <form noValidate onSubmit={handleSubmitForm} className="home-page__form">
                     <h3 className="home-page__form__title">Transfer</h3>

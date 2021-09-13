@@ -74,3 +74,11 @@ export interface ITransactionRecipientDetails {
     bank_code: string;
     bank_name: string;
 }
+
+export interface ITransferRecipient {
+    type: string;
+    name: string | undefined;
+    account_number: string;
+    bank_code: string;
+    currency: string;
+}
