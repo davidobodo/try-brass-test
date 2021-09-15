@@ -7,11 +7,14 @@
 
     @media (min-width: 768px) {
         padding: 10rem;
+        width: 100%;
     }
 
     .table-wrapper {
-        weight: 100%;
-        overflow: auto;
+        @media (max-width: 768px) {
+            weight: 100%;
+            overflow: auto;
+        }
     }
 
     &__table {

@@ -18,7 +18,7 @@ const History = () => {
             try {
                 const res = await axios.get("https://api.paystack.co/transfer", {
                     headers: {
-                        Authorization: `Bearer ${process.env.REACT_APP_PAYSTACK_TEST_PUBLIC_KEY}`
+                        Authorization: `Bearer ${process.env.REACT_APP_PAYSTACK_TEST_SECRET_KEY}`
                     }
                 });
 
